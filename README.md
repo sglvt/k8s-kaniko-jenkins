@@ -1,7 +1,7 @@
 
 # Overview
 
-The following steps will use the `values.yaml` and `config.json.template` files from this repository in order to set up a Jenkins server running in Kubernetes, and configuring a Kaniko pod template.
+The following steps will use the `values.yaml` and `config.json.template` files from this repository in order to set up a Jenkins server running in Kubernetes, and configuring a Kaniko pod template (Jenkins agent) for it.
 
 The value file is based on the [default value file of the Jenkins chart](https://github.com/helm/charts/blob/master/stable/jenkins/values.yaml),
 
