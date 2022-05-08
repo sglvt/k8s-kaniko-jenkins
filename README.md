@@ -19,7 +19,7 @@ You'll need to update the `user` and `token` placeholders before executing the f
 
 ```
 export BASE64_CREDENTIALS=$(echo -n "<user>:<token>"| base64) && \
-  curl -sL https://raw.githubusercontent.com/serbangilvitu/k8s-kaniko-jenkins/master/config.json.template \
+  curl -sL https://raw.githubusercontent.com/sglvt/k8s-kaniko-jenkins/master/config.json.template \
   | envsubst > config.json && \
   kubectl -n kaniko-demo create secret generic kaniko-secret --from-file=config.json
 ```
@@ -28,18 +28,29 @@ export BASE64_CREDENTIALS=$(echo -n "<user>:<token>"| base64) && \
 
 Optionally, you can have a look at the rendered template using `helm template`, which is a good idea before installing any chart.
 
-The value file is customized to create a pod template with 2 containers: jnlp(Jenkins agent), and kaniko (see the [podTemplates](https://github.com/serbangilvitu/k8s-kaniko-jenkins/blob/master/values.yaml#L557) section - resource requests/limits can be tweaked).
+The value file is customized to create a pod template with 2 containers: jnlp(Jenkins agent), and kaniko (see the [podTemplates](https://github.com/sglvt/k8s-kaniko-jenkins/blob/master/values.yaml#L557) section - resource requests/limits can be tweaked).
 
 If you want to make further changes, first download the file and update the `--values` argument to point to the local values.yaml file.
 
 To install the chart:
 
 ```
-helm install demo stable/jenkins \
+helm repo add jenkins https://charts.jenkins.io
+helm repo update
+export CHART_VERSION=$(helm search repo -o json | jq -r .[0].version)
+helm upgrade -i demo jenkins/jenkins \
   --namespace kaniko-demo \
-  --version 2.5.0 \
-  --values https://raw.githubusercontent.com/serbangilvitu/k8s-kaniko-jenkins/master/values.yaml \
+  --version ${CHART_VERSION} \
+  --values https://raw.githubusercontent.com/sglvt/k8s-kaniko-jenkins/master/values.yaml \
   --set namespaceOverride=kaniko-demo
 ```
 
 Jenkins is now deploying, and will soon be accessible with a configuration which supports building container images using Kaniko.
+
+## Additional info
+The value file was saved using
+```
+export CHART_VERSION=$(helm search repo -o json | jq -r .[0].version)
+helm show values jenkins/jenkins --version ${CHART_VERSION} > values.${CHART_VERSION}.yaml
+```
+and edited afterwards

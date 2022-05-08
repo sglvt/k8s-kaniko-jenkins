@@ -722,37 +722,22 @@ agent:
   # For this pod templates configuration to be loaded the following values must be set:
   # controller.JCasC.defaultConfig: true
   # Best reference is https://<jenkins_url>/configuration-as-code/reference#Cloud-kubernetes. The example below creates a python pod template.
-  podTemplates:
-     kaniko: |
-      - name: kaniko
-        label: kaniko
-        serviceAccount: demo-jenkins
-        containers:
-          - name: kaniko
-            image: gcr.io/kaniko-project/executor:debug
-            command: "sh -c"
-            args: "cat"
-            ttyEnabled: true
-            privileged: false
-            resourceRequestCpu: "400m"
-            resourceRequestMemory: "128Mi"
-            resourceLimitCpu: "1"
-            resourceLimitMemory: "1024Mi"
-          - name: jnlp
-            image: jenkins/inbound-agent:4.3-4
-            command: "jenkins-agent"
-            args: ""
-            ttyEnabled: true
-            privileged: false
-            resourceRequestCpu: "200m"
-            resourceRequestMemory: "64Mi"
-            resourceLimitCpu: "500m"
-            resourceLimitMemory: "256Mi"
-        volumes:
-          - secretVolume:
-              secretName: kaniko-secret
-              mountPath: "/kaniko/.docker"
-              defaultMode: "400"
+  podTemplates: {}
+  #  python: |
+  #    - name: python
+  #      label: jenkins-python
+  #      serviceAccount: jenkins
+  #      containers:
+  #        - name: python
+  #          image: python:3
+  #          command: "/bin/sh -c"
+  #          args: "cat"
+  #          ttyEnabled: true
+  #          privileged: true
+  #          resourceRequestCpu: "400m"
+  #          resourceRequestMemory: "512Mi"
+  #          resourceLimitCpu: "1"
+  #          resourceLimitMemory: "1024Mi"
 
 # Here you can add additional agents
 # They inherit all values from `agent` so you only need to specify values which differ
