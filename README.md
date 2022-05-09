@@ -37,7 +37,7 @@ To install the chart:
 ```
 helm repo add jenkins https://charts.jenkins.io
 helm repo update
-export CHART_VERSION=$(helm search repo -o json | jq -r .[0].version)
+export CHART_VERSION=$(helm search repo jenkins/jenkins -o json | jq -r .[0].version)
 helm upgrade -i demo jenkins/jenkins \
   --namespace kaniko-demo \
   --version ${CHART_VERSION} \
